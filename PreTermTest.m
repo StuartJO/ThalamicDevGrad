@@ -1,5 +1,3 @@
-
-
 RescannedATterm = (thal_sub_meta.birth_age<37 & thal_sub_meta.scan_age>=37);
 
 PRETERM = find(RescannedATterm);

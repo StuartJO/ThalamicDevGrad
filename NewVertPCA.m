@@ -55,8 +55,15 @@ medwallmask = logical(medmaskgii.cdata);
 Nverts = length(medwallmask);
 Nverts_nomed = sum(medwallmask);
 
-PCAOUTPUT_DIR = 'C:\Users\Stuart\Documents\OHBM2023_animations\NEW_PCA_results';
+PCAOUTPUT_DIR = 'C:\Users\Stuart\Documents\GitHub\ThalamicDevGrad\outputs';
 addpath(PCAOUTPUT_DIR)
+
+for i = 1:length(SUB)
+ThalMeanConn(i,:) = dlmread([PCAOUTPUT_DIR,'\CortPropConn\',SUB{i},'_',num2str(SES(i)),'.txt']);
+end
+
+
+
 for i = 1:length(SUB)
     
     score_ = zeros(800,5);
