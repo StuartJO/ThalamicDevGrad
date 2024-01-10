@@ -1,6 +1,6 @@
 sub_ses = readtable('ALL_sub_ses.txt');
 
-saveoutput = 1;
+saveoutput = 0;
 makefig = 1;
 
 SUB = sub_ses.Var1;
@@ -55,21 +55,34 @@ medwallmask = logical(medmaskgii.cdata);
 Nverts = length(medwallmask);
 Nverts_nomed = sum(medwallmask);
 
-load('C:\Users\Stuart\Documents\GitHub\ThalamicDevGrad\outputs\Weighted\Avg.mat')
-Norm = BF_NormalizeMatrix(TrainDataAvg,'scaledsigmoid');
+%load('C:\Users\Stuart\Documents\GitHub\ThalamicDevGrad\outputs\Weighted\Avg.mat')
+load('.\outputs\Weighted\Avg.mat')
+
+Norm = BF_NormalizeMatrix(TrainDataAvg,'scaledSigmoid');
 Norm(isnan(Norm)) = 0;
 [TrainCoeff,TrainScore,~,~,TrainExplained] = pca(Norm);
 
 for i = 1:length(SUB)
-    inData = load(['C:\Users\Stuart\Documents\GitHub\ThalamicDevGrad\outputs\Weighted\',SUB{i},'_',num2str(SES(i)),'.mat']);
+    %inData = load(['C:\Users\Stuart\Documents\GitHub\ThalamicDevGrad\outputs\Weighted\',SUB{i},'_',num2str(SES(i)),'.mat']);
+    inData = load(['.\outputs\Weighted\',SUB{i},'_',num2str(SES(i)),'.mat']);
+    
     AllScore{i} = inData.score1_5;
     AllCoeff{i} = inData.coeff1_5;
 end
+
 
 [aligned, xfms] = procrustes_alignment(AllScore,'reference',TrainScore(:,1:5));
 
 for i = 1:length(SUB)
 coeff_aligned_all{i} = AllCoeff{i}*xfms{i};
+end
+
+
+run = 0;
+if run == 1
+
+
+for i = 1:length(SUB)
 
 PC1_thal_all(:,i) = zscore(aligned{i}(:,1));
 PC1_aligned_all(:,i) =  zscore((coeff_aligned_all{i}(:,1)));
@@ -329,7 +342,7 @@ c.Label.String = {'Preterm relative to term PC1 score difference'};
 c.Label.FontSize = 14;
 set(gca,'FontSize',18)
 
-
+end
 
 % 
 % AllThalDiff = (MeanDiff.*fdr_ancova)~=0;

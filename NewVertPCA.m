@@ -55,14 +55,13 @@ medwallmask = logical(medmaskgii.cdata);
 Nverts = length(medwallmask);
 Nverts_nomed = sum(medwallmask);
 
-PCAOUTPUT_DIR = 'C:\Users\Stuart\Documents\GitHub\ThalamicDevGrad\outputs';
+%PCAOUTPUT_DIR = 'C:\Users\Stuart\Documents\GitHub\ThalamicDevGrad\outputs';
+PCAOUTPUT_DIR = '.\outputs';
 addpath(PCAOUTPUT_DIR)
 
 for i = 1:length(SUB)
 ThalMeanConn(i,:) = dlmread([PCAOUTPUT_DIR,'\CortPropConn\',SUB{i},'_',num2str(SES(i)),'.txt']);
 end
-
-
 
 for i = 1:length(SUB)
     
