@@ -112,20 +112,20 @@ CortConnNorm = sum(Norm,1);
 coeff1_5 = coeff(:,1:5);
 score1_5 = score(:,1:5);
 
-save(['C:\Users\Stuart\Documents\GitHub\ThalamicDevGrad\outputs\Unweighted\',SUB{i},'_',num2str(SES(i)),'.mat'],'coeff1_5','score1_5','CortConnNorm','ThalConnNorm','ThalConn','CortConn')
+save(['.\outputs\Unweighted\',SUB{i},'_',num2str(SES(i)),'.mat'],'coeff1_5','score1_5','CortConnNorm','ThalConnNorm','ThalConn','CortConn')
 
 if ismember(i,ToUse4Avg)
     TrainData = TrainData+data_nonmed;
     %TrainDataNorm = TrainDataNorm+Norm;
-% AllExpl(i,:) = explained;    
-% AllScore{i} = score(:,1:5);
-% AllCoeff{i} = coeff(:,1:5);
+    % AllExpl(i,:) = explained;    
+    % AllScore{i} = score(:,1:5);
+    % AllCoeff{i} = coeff(:,1:5);
 end
 disp(num2str(i))
 end
 
 TrainDataAvg = TrainData/length(ToUse4Avg);
-save('C:\Users\Stuart\Documents\GitHub\ThalamicDevGrad\outputs\Unweighted\Avg.mat','TrainDataAvg')
+save('.\outputs\Unweighted\Avg.mat','TrainDataAvg')
 
 % for i = 1:length(SUB)
 % 
