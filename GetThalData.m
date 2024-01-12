@@ -67,9 +67,9 @@ for i = 1:length(SUB)
 data = dlmread(['D:/TC_connectivity/',SUB{i},'_',num2str(SES(i)),'_thal_conn_verts_wei.txt']);
 data_nonmed = data(:,medwallmask);
 data_nonmed(isnan(data_nonmed)) = 0;
-Norm = BF_NormalizeMatrix(data_nonmed,'scaledsigmoid');
+Norm = BF_NormalizeMatrix(data_nonmed,'scaledSigmoid');
 Norm(isnan(Norm)) = 0;
-[coeff,score,~,~,explained] = pca(Norm);
+[coeff,score,~,~,varExpln] = pca(Norm);
 ThalConn = sum(data_nonmed,2);
 CortConn = sum(data_nonmed,1);
 ThalConnNorm = sum(Norm,2);
@@ -78,7 +78,7 @@ CortConnNorm = sum(Norm,1);
 coeff1_5 = coeff(:,1:5);
 score1_5 = score(:,1:5);
 
-save(['C:\Users\Stuart\Documents\GitHub\ThalamicDevGrad\outputs\Weighted\',SUB{i},'_',num2str(SES(i)),'.mat'],'coeff1_5','score1_5','CortConnNorm','ThalConnNorm','ThalConn','CortConn')
+save(['C:\Users\Stuart\Documents\GitHub\ThalamicDevGrad\outputs\Weighted\',SUB{i},'_',num2str(SES(i)),'.mat'],'coeff1_5','score1_5','CortConnNorm','ThalConnNorm','ThalConn','CortConn','varExpln')
 
 if ismember(i,ToUse4Avg)
     TrainData = TrainData+data_nonmed;
@@ -101,9 +101,9 @@ for i = 1:length(SUB)
 data = dlmread(['D:/TC_connectivity/',SUB{i},'_',num2str(SES(i)),'_thal_conn_verts.txt']);
 data_nonmed = data(:,medwallmask);
 data_nonmed(isnan(data_nonmed)) = 0;
-Norm = BF_NormalizeMatrix(data_nonmed,'scaledsigmoid');
+Norm = BF_NormalizeMatrix(data_nonmed,'scaledSigmoid');
 Norm(isnan(Norm)) = 0;
-[coeff,score,~,~,explained] = pca(Norm);
+[coeff,score,~,~,varExpln] = pca(Norm);
 ThalConn = sum(data_nonmed,2);
 CortConn = sum(data_nonmed,1);
 ThalConnNorm = sum(Norm,2);
@@ -112,7 +112,7 @@ CortConnNorm = sum(Norm,1);
 coeff1_5 = coeff(:,1:5);
 score1_5 = score(:,1:5);
 
-save(['.\outputs\Unweighted\',SUB{i},'_',num2str(SES(i)),'.mat'],'coeff1_5','score1_5','CortConnNorm','ThalConnNorm','ThalConn','CortConn')
+save(['.\outputs\Unweighted\',SUB{i},'_',num2str(SES(i)),'.mat'],'coeff1_5','score1_5','CortConnNorm','ThalConnNorm','ThalConn','CortConn','varExpln')
 
 if ismember(i,ToUse4Avg)
     TrainData = TrainData+data_nonmed;

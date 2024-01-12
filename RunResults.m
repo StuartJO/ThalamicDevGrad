@@ -68,6 +68,7 @@ for i = 1:length(SUB)
     
     AllScore{i} = inData.score1_5;
     AllCoeff{i} = inData.coeff1_5;
+    AllExpl(i,:) = inData.varExpln;
 end
 
 
