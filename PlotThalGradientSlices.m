@@ -67,7 +67,9 @@ axes_front.XTick = [];
 axes_front.YTick = [];
 axes_back.XTick = [];
 axes_back.YTick = [];
+if climits(1)~=climits(2)
 caxis(climits);
+end
 colormap(axes_front,grad_cmap);
 % axes_back.Position = [0 -.2 1 1];
 % axes_front.Position = [0 -.2 1 1];

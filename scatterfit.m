@@ -1,4 +1,4 @@
-function s = scatterfit(x,y,sz,c,pformat,plotCorr)
+function [s,t] = scatterfit(x,y,sz,c,pformat,plotCorr)
 
 if nargin < 3
     sz = 36;
@@ -63,8 +63,11 @@ if r < 0
 else
     d = .1;
 end
-if plotCorr
+if plotCorr == 1
 text_x_coord = find_point_on_line(xlimits(1),xlimits(2),d);
 text_y_coord = find_point_on_line(ylimits(1),ylimits(2),.9);
-text(text_x_coord,text_y_coord,{['{\itr} = ',num2str(round(r,3))],p_val_format},'FontSize',18)
+t = text(text_x_coord,text_y_coord,{['{\itr} = ',num2str(round(r,3))],p_val_format},'FontSize',18);
+elseif plotCorr == 2
+    title(['{\itr} = ',num2str(round(r,3)),', ',p_val_format])
+    t = [];
 end
