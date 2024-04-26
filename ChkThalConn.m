@@ -26,6 +26,6 @@ for i = 1:3
 disp([num2str(mean(AllExpl(Test,i))),'+-',num2str(std(AllExpl(Test,i)))])
 end
 
-Seeds100conn = mean(ThalConn)>100;
+Seeds100conn = mean(ThalConn)>=100;
 ThalConnMean = mean(ThalConn);
 save('SeedsThr.mat','Seeds100conn','ThalConnMean')

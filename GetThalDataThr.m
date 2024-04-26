@@ -8,7 +8,7 @@ SES = sub_ses.Var2;
 
 Thr = 100;
 load('SeedsThr.mat','ThalConnMean')
-SeedThr = ThalConnMean>=100;
+SeedThr = ThalConnMean>=Thr;
 
 Nseed = sum(SeedThr);
 
@@ -116,10 +116,6 @@ save([PCAOUTPUT_DIR,'\Weighted\',SUB{i},'_',num2str(SES(i)),'.mat'],'coeff1_5','
 
 if ismember(i,Train)
     TrainData = TrainData+data_nonmed;
-    %TrainDataNorm = TrainDataNorm+Norm;
-% AllExpl(i,:) = explained;    
-% AllScore{i} = score(:,1:5);
-% AllCoeff{i} = coeff(:,1:5);
 end
 disp(num2str(i))
 end

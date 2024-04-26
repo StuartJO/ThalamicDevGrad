@@ -2,7 +2,7 @@ Weighted=1;
 
 sub_ses = readtable('ALL_sub_ses.txt');
 
-makefig = 1;
+makefig = 0;
 
 SUB = sub_ses.Var1;
 SES = sub_ses.Var2;
@@ -163,3 +163,6 @@ for i = 1:length(PRETERM)
    MatchedTERM(i) = TryToMatch(Ind);
    NotMatched(Ind) = 0;
 end
+
+Term_scan_age = thal_sub_meta.scan_age(TryToMatch);
+Term_sex = SexInd(TryToMatch);

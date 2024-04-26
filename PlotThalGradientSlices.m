@@ -1,7 +1,7 @@
-function PlotThalGradientSlices(GRAD_DATA,GRAD_DATA_vox_coord,grad_cmap,TITLE,thr,climits)
+function c = PlotThalGradientSlices(GRAD_DATA,GRAD_DATA_vox_coord,grad_cmap,TITLE,thr,climits)
 
 if nargin < 6
-   climits = [min(GRAD_DATA) max(GRAD_DATA)];
+   climits = [nanmin(GRAD_DATA) nanmax(GRAD_DATA)];
 end
 
 load('Week40_brain_thal_data.mat','braindata','thalmask')
@@ -67,7 +67,7 @@ axes_front.XTick = [];
 axes_front.YTick = [];
 axes_back.XTick = [];
 axes_back.YTick = [];
-if climits(1)~=climits(2)
+if climits(1)~=climits(2) && sum(isnan(climits))~=2
 caxis(climits);
 end
 colormap(axes_front,grad_cmap);
