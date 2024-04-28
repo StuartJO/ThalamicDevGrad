@@ -1,7 +1,6 @@
 
-
 makefig = 1;
-saveoutput=0;
+saveoutput=1;
 
 Weighted=1;
 
@@ -13,7 +12,7 @@ elseif Weighted == 1
     WEITYPE_ABBREV='_WEI';
 end
 
-PCAOUTPUTFIG_DIR = ['C:/Users/Stuart/Documents/GitHub/ThalamicDevGrad/figures/Thr',num2str(Thr),'/',WEITYPE];
+PCAOUTPUTFIG_DIR = ['./figures/Thr',num2str(Thr),'/',WEITYPE];
 
 mkdir(PCAOUTPUTFIG_DIR)
 
@@ -26,11 +25,11 @@ PC_cort_all(:,i) =  zscore((coeff_aligned_all{i}(:,PC)));
 
 end
 
-PC_thal = PC_thal_all(:,Test);
-PC_cort = PC_cort_all(:,Test);
+PC_thal = PC_thal_all(:,NonTemplateInd);
+PC_cort = PC_cort_all(:,NonTemplateInd);
 
-TrainCoeffz_cort = zeros(Nverts,Nseed-1);
-TrainCoeffz_cort(medwallmask,:) = TrainCoeffz;
+TemplateCoeffz_cort = zeros(Nverts,Nseed-1);
+TemplateCoeffz_cort(medwallmask,:) = TemplateCoeffz;
 
 gL = gifti('week-40_hemi-left_space-dhcpSym_dens-32k_vinflated.surf.gii');
 surface.vertices = gL.vertices;
@@ -38,11 +37,11 @@ surface.faces = gL.faces;
 
 CorrType = 'Pearson';
 
-[PC_corr_wAvg,PC_corr_wAvg_p] = corr(TrainCoeffz(:,PC),PC_cort,'Type',CorrType);
+[PC_corr_wAvg,PC_corr_wAvg_p] = corr(TemplateCoeffz(:,PC),PC_cort,'Type',CorrType);
 
-[PC_corr_wAvg_thal,PC_corr_wAvg_thal_p] = corr(TrainScorez(:,PC),PC_thal,'Type',CorrType);
+[PC_corr_wAvg_thal,PC_corr_wAvg_thal_p] = corr(TemplateScorez(:,PC),PC_thal,'Type',CorrType);
 
-[PC_age_corr,PC_age_corr_p] = corr(thal_sub_meta.scan_age(Test),PC_cort','Type',CorrType);
+[PC_age_corr,PC_age_corr_p] = corr(NonTemplate_scan_age,PC_cort','Type',CorrType);
 
 CorrRange = max(abs(PC_age_corr(:)));
 up = ceil(CorrRange * 10) / 10;
@@ -60,15 +59,14 @@ if makefig
 print([PCAOUTPUTFIG_DIR,'/VERT',WEITYPE_ABBREV,'_PC',num2str(PC),'_loading_corr_scan_age_region.png'],'-dpng','-r300')
 end
 
-
-ExampleSurfacePlotFunction(surface,double(medwallmask),TrainCoeffz_cort(:,PC),turbo(256),['Term template PC',num2str(PC),' loading'],[min(TrainCoeffz_cort(:,PC)) max(TrainCoeffz_cort(:,PC))],'none');    
+ExampleSurfacePlotFunction(surface,double(medwallmask),TemplateCoeffz_cort(:,PC),turbo(256),['Term template PC',num2str(PC),' loading'],[min(TemplateCoeffz_cort(:,PC)) max(TemplateCoeffz_cort(:,PC))],'none');    
 
 if makefig
 print([PCAOUTPUTFIG_DIR,'/VERT',WEITYPE_ABBREV,'_Group_PC',num2str(PC),'_loading.png'],'-dpng','-r300')
 end
 
 figure %figure('Position',[189   318   946   688])
-s = scatterfit(TrainCoeffz(:,PC),PC_age_corr,36,PC_age_corr.*fdr,[],2);
+s = scatterfit(TemplateCoeffz(:,PC),PC_age_corr,36,PC_age_corr.*fdr,[],2);
 s.MarkerFaceAlpha=1;
 colormap(cmocean('Balance'))
 maxCorr = max(abs(PC_age_corr.*fdr));
@@ -84,7 +82,7 @@ if makefig
 print([PCAOUTPUTFIG_DIR,'/VERT',WEITYPE_ABBREV,'_Group_PC',num2str(PC),'_loading_vs_scan_age_corr.png'],'-dpng','-r300')
 end
 
-[PC_thal_age_corr,PC_thal_age_corr_p] = corr(thal_sub_meta.scan_age(Test),PC_thal','Type',CorrType);
+[PC_thal_age_corr,PC_thal_age_corr_p] = corr(NonTemplate_scan_age,PC_thal','Type',CorrType);
 fdr_thal = BF_FDR(PC_thal_age_corr_p,.05)';
 CorrRange = max(abs(PC_thal_age_corr(:)));
 up = ceil(CorrRange * 10) / 10;
@@ -93,7 +91,7 @@ vox_coords_full = dlmread('thal_seed_1.75mm_vox_coords.txt');
 
 vox_coords = vox_coords_full(SeedThr,:);
 
-PlotThalGradientSlices((TrainScorez(:,PC)),vox_coords,turbo(256),['Term template PC',num2str(PC),' score'],4);
+PlotThalGradientSlices((TemplateScorez(:,PC)),vox_coords,turbo(256),['Term template PC',num2str(PC),' score'],4);
 if makefig
 print([PCAOUTPUTFIG_DIR,'/VERT',WEITYPE_ABBREV,'_Group_PC',num2str(PC),'_score.png'],'-dpng','-r300')
 end
@@ -105,7 +103,7 @@ if makefig
 print([PCAOUTPUTFIG_DIR,'/VERT',WEITYPE_ABBREV,'_PC',num2str(PC),'_score_corr_scan_age_region.png'],'-dpng','-r300')
 end
 figure %figure('Position',[189   318   946   688])
-s = scatterfit(TrainScorez(:,PC),PC_thal_age_corr,36,PC_thal_age_corr.*fdr_thal,[],2);
+s = scatterfit(TemplateScorez(:,PC),PC_thal_age_corr,36,PC_thal_age_corr.*fdr_thal,[],2);
 s.MarkerFaceAlpha=1;
 colormap(cmocean('Balance'))
 caxis([-up up])
@@ -119,7 +117,7 @@ if makefig
 print([PCAOUTPUTFIG_DIR,'/VERT',WEITYPE_ABBREV,'_Group_PC',num2str(PC),'_score_vs_scan_age_corr.png'],'-dpng','-r300')
 end
 figure %figure('Position',[189   318   946   688])
-s = scatterfit(thal_sub_meta.scan_age(Test),PC_corr_wAvg);
+s = scatterfit(NonTemplate_scan_age,PC_corr_wAvg);
 s.MarkerFaceAlpha=1;
 xlabel('Scan age (weeks)')
 ylabel({['Correlation with PC',num2str(PC)],'term template (loading)'})
@@ -128,13 +126,11 @@ if makefig
 print([PCAOUTPUTFIG_DIR,'/VERT',WEITYPE_ABBREV,'_PC',num2str(PC),'_loading_corr_scan_age.png'],'-dpng','-r300')
 end
 figure %figure('Position',[189   318   946   688])
-s = scatterfit(thal_sub_meta.scan_age(Test),PC_corr_wAvg_thal);
+s = scatterfit(NonTemplate_scan_age,PC_corr_wAvg_thal);
 s.MarkerFaceAlpha=1;
 xlabel('Scan age (weeks)')
 ylabel({['Correlation with PC',num2str(PC)],'term template (score)'})
 set(gca,'FontSize',18)
-
-
 
 s.MarkerFaceAlpha=1;
 
@@ -145,7 +141,7 @@ end
 figure('Position',[62   300   1300   335])
 for i = 1:3
     subplot(1,3,i)
-[s,t] = scatterfit(vox_coords(:,i),PC_thal_age_corr,36,TrainScorez(:,PC));
+[s,t] = scatterfit(vox_coords(:,i),PC_thal_age_corr,36,TemplateScorez(:,PC));
 s.MarkerFaceAlpha=1;
 cardDir={'Medial-Lateral','Anterior-posterior','Ventral-Dorsal'};
 xlabel(cardDir{i})
@@ -168,17 +164,11 @@ if makefig
 print([PCAOUTPUTFIG_DIR,'/VERT',WEITYPE_ABBREV,'_PC',num2str(PC),'_score_CardDirCorr.png'],'-dpng','-r300')
 end
 
-% figure %figure('Position',[189   318   946   688])
-% s = scatterfit(thal_sub_meta.scan_age(Test),TestExpl(:,1));
-% s.MarkerFaceAlpha=1;
-% xlabel('Scan age (weeks)')
-% ylabel({'PC variance explained'})
-% set(gca,'FontSize',18)
-
 figure('Position',[62   300   1300   335])
+
 for i = 1:3
     subplot(1,3,i)
-[s,t] = scatterfit(vox_coords(:,i),TrainScorez(:,PC),36,lines(1),[],2);
+[s,t] = scatterfit(vox_coords(:,i),TemplateScorez(:,PC),36,lines(1),[],2);
 s.MarkerFaceAlpha=.5;
 cardDir={'Medial-Lateral','Anterior-posterior','Ventral-Dorsal'};
 xlabel(cardDir{i})

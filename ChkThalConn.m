@@ -1,16 +1,19 @@
-sub_ses = readtable('ALL_sub_ses.txt');
-
-SUB = sub_ses.Var1;
-SES = sub_ses.Var2;
+load('UsedSubData.mat')
 
 for i = 1:length(SUB)
-    
-IN = load(['.\outputs\Weighted\',SUB{i},'_',num2str(SES(i)),'.mat'],'CortConnNorm','ThalConnNorm','ThalConn','CortConn');
 
-CortConnNorm(i,:) = IN.CortConnNorm;
-ThalConnNorm(i,:) = IN.ThalConnNorm;
-ThalConn(i,:) = IN.ThalConn;
-CortConn(i,:) = IN.CortConn;
+data = dlmread(['D:/TC_connectivity/',SUB{i},'_',num2str(SES(i)),'_thal_conn_verts_wei.txt']);
+data_nonmed = data(:,medwallmask);
+data_nonmed(isnan(data_nonmed)) = 0;
+Norm = BF_NormalizeMatrix(data_nonmed,'scaledSigmoid');
+Norm(isnan(Norm)) = 0;
+
+CortConnNorm(i,:) = sum(Norm,1);
+ThalConnNorm(i,:) = sum(Norm,2);
+
+ThalConn(i,:) = sum(data_nonmed,2);
+CortConn(i,:) = sum(data_nonmed,1);
+
 end
 
 vox_coords = dlmread('thal_seed_1.75mm_vox_coords.txt');
@@ -19,7 +22,7 @@ ThalConnNormMean = mean(ThalConnNorm);
 
 for i = 1:3
     subplot(1,3,i)
-scatter(ThalConnNormMean,vox_coords(:,i))
+    scatter(ThalConnNormMean,vox_coords(:,i))
 end
 
 for i = 1:3

@@ -1,40 +1,28 @@
 
-[U,in] = unique(dHCP_meta.participant_id);
-median(dHCP_meta.birth_age(in))
-min(dHCP_meta.birth_age(in))
-max(dHCP_meta.birth_age(in))
+load('UsedSubData.mat')
 
-median(dHCP_meta.scan_age)
-min(dHCP_meta.scan_age)
-max(dHCP_meta.scan_age)
+median(NonDup_birth_age)
+min(NonDup_birth_age)
+max(NonDup_birth_age)
 
-Nfemale = sum(strcmp(dHCP_meta.sex(in), 'female'));
+%Nfemale = sum(strcmp(dHCP_meta.sex(in), 'female'));
+Nfemale = sum(NonDup_sex==1);
 
-full_birth_age = dHCP_meta.birth_age(I);
-full_scan_age = dHCP_meta.scan_age(I);
+median(NonTemplate_birth_age)
+min(NonTemplate_birth_age)
+max(NonTemplate_birth_age)
 
-[~,ORD] = sort(full_birth_age);
+median(NonTemplate_scan_age)
+min(NonTemplate_scan_age)
+max(NonTemplate_scan_age)
 
-scatter(full_birth_age(ORD),1:length(I),'filled')
-hold on
-scatter(full_scan_age(ORD),1:length(I),'filled')
+sum(NonTemplate_sex==1)
 
+sum(PretermTermScan_sex==1)
+median(PretermTermScan_birth_age)
+min(PretermTermScan_birth_age)
+max(PretermTermScan_birth_age)
 
-median(thal_sub_meta.birth_age(ToUse))
-min(thal_sub_meta.birth_age(ToUse))
-max(thal_sub_meta.birth_age(ToUse))
-
-median(thal_sub_meta.scan_age(ToUse))
-min(thal_sub_meta.scan_age(ToUse))
-max(thal_sub_meta.scan_age(ToUse))
-
-sum(strcmp(thal_sub_meta.sex(ToUse), 'female'))
-
-sum(strcmp(thal_sub_meta.sex(PRETERM), 'female'))
-median(thal_sub_meta.birth_age(PRETERM))
-min(thal_sub_meta.birth_age(PRETERM))
-max(thal_sub_meta.birth_age(PRETERM))
-
-median(thal_sub_meta.scan_age(PRETERM))
-min(thal_sub_meta.scan_age(PRETERM))
-max(thal_sub_meta.scan_age(PRETERM))
+median(PretermTermScan_scan_age)
+min(PretermTermScan_scan_age)
+max(PretermTermScan_scan_age)

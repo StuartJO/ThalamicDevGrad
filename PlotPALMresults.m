@@ -1,4 +1,5 @@
 
+load('TermVsPretermTC_WEI_Thr100.mat')
 
 
 Y = dlmread('TermVsPreterm_tfce_tstat_c1.csv');
