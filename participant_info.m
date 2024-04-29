@@ -1,4 +1,3 @@
-
 load('UsedSubData.mat')
 
 median(NonDup_birth_age)

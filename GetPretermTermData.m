@@ -63,10 +63,10 @@ TERM_Thal_TC(i,:) = sum(tc,2);
 TERM_Thal_TC_norm(i,:) = sum(norm,2);
 end
 
-save(['TermVsPretermTC',WEITYPE_ABBREV,'_Thr',num2str(Thr),'.mat'],'TERM_Thal_TC_norm','PRETERM_Thal_TC_norm','TERM_Thal_TC','PRETERM_Thal_TC','TERM_Cort_TC_norm','TERM_Cort_TC','PRETERM_Cort_TC_norm','PRETERM_Cort_TC')
+save(['./outputs/TermVsPretermTC',WEITYPE_ABBREV,'_Thr',num2str(Thr),'.mat'],'TERM_Thal_TC_norm','PRETERM_Thal_TC_norm','TERM_Thal_TC','PRETERM_Thal_TC','TERM_Cort_TC_norm','TERM_Cort_TC','PRETERM_Cort_TC_norm','PRETERM_Cort_TC')
 
 TERMavg = TERMsum./length(MatchedTERM);
 PRETERMavg = PRETERMsum./length(MatchedTERM);
 clear TERMsum PRETERMsum
-save('TermPretermAvg.mat','TERMavg','PRETERMavg')
+save('./outputs/TermPretermAvg.mat','TERMavg','PRETERMavg')
 
